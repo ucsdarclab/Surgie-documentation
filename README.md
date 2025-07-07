@@ -10,6 +10,7 @@
 4.  [Network Configuration](#network-configuration)
 5.  [Safety](#safety)
 6.  [Troubleshooting](#troubleshooting)
+7.  [Inspire Hands Gen 4](#Inspire-Hands-Gen-4:-Setup=-and-Usage-Guide)
 
 ---
 
@@ -135,6 +136,60 @@ In the example below, the network card name for the IP **192.168.123.222** is `e
 ## Troubleshooting
 
 *(This section is under development.)*
+
+
+## Inspire Hands Gen 4: Setup and Usage Guide
+
+### Setup and Installation
+
+Follow these steps to set up the necessary software for the Inspire Hand.
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/Soofiyan/inspire_hand_ws.git
+cd inspire_hand_ws
+
+# 2. Install the Unitree SDK
+cd unitree_sdk2_python
+pip install -e .
+
+# 3. Install the Inspire Hand SDK
+cd ../inspire_hand_sdk
+pip install -e .
+
+# 4. Install required Python libraries
+pip install pynput
+pip install pymodbus==3.6.9
+```
+
+-----
+
+### Read Sensor Data
+
+Use the `data_handler_worker` callback function from the `sub_traget_LR.py` code to read sensor data.
+
+### Control Modes
+
+The Inspire Hand SDK offers various control modes. You can select a mode by its corresponding ID number.
+
+| Mode ID | Binary | Description |
+| :--- | :--- | :--- |
+| 0 | `0000` | No Operation |
+| 1 | `0001` | Angle Control |
+| 2 | `0010` | Position Control |
+| 3 | `0011` | Angle + Position |
+| 4 | `0100` | Force Control |
+| 5 | `0101` | Angle + Force |
+| 6 | `0110` | Position + Force |
+| 7 | `0111` | Angle + Position + Force |
+| 8 | `1000` | Velocity Control |
+| 9 | `1001` | Angle + Velocity |
+| 10 | `1010` | Position + Velocity |
+| 11 | `1011` | Angle + Position + Velocity |
+| 12 | `1100` | Force + Velocity |
+| 13 | `1101` | Angle + Force + Velocity |
+| 14 | `1110` | Position + Force + Velocity |
+| 15 | `1111` | Angle + Position + Force + Velocity |
 
 -----
 
