@@ -10,7 +10,7 @@
 4.  [Network Configuration](#network-configuration)
 5.  [Safety](#safety)
 6.  [Troubleshooting](#troubleshooting)
-7.  [Inspire Hands Gen 4](#Inspire-Hands-Gen-4:-Setup=-and-Usage-Guide)
+7.  [Inspire Hands Gen 4](#Inspire-Hands-Gen-4)
 
 ---
 
@@ -138,7 +138,7 @@ In the example below, the network card name for the IP **192.168.123.222** is `e
 *(This section is under development.)*
 
 
-## Inspire Hands Gen 4: Setup and Usage Guide
+## Inspire Hands Gen 4
 
 ### Setup and Installation
 
