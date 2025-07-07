@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>G1 Robot Operation Document</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        header {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        header h1 {
+            color: #1a73e8;
+        }
+
+        nav {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #1a73e8;
+            padding: 10px 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin: 0 5px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        nav a:hover,
+        nav a.active {
+            background-color: #1a73e8;
+            color: #fff;
+        }
+
+        section {
+            display: none;
+        }
+
+        section.active {
+            display: block;
+        }
+
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #1a73e8;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #555;
+        }
+
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+
+        code {
+            font-family: "Fira Code", "Courier New", monospace;
+        }
+
+        .troubleshooting-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .troubleshooting-table th,
+        .troubleshooting-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .troubleshooting-table th {
+            background-color: #f2f2f2;
+        }
+
+        .safety-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .safety-list li {
+            background: #fffbe6;
+            border-left: 5px solid #ffc107;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            padding: 20px;
+            border-top: 1px solid #ddd;
+            font-size: 0.9em;
+            color: #777;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <header>
+            <h1>G1 Robot Operation Document</h1>
+            <p>Teleoperation and G1 handling guide.</p>
+        </header>
+
+        <nav>
+            <a href="#home" class="active" onclick="showSection('home')">Home</a>
+            <a href="#installation" onclick="showSection('installation')">Installation</a>
+            <a href="#usage" onclick="showSection('usage')">Usage</a>
+            <a href="#network" onclick="showSection('network')">Network</a>
+            <a href="#safety" onclick="showSection('safety')">Safety</a>
+            <a href="#troubleshooting" onclick="showSection('troubleshooting')">Troubleshooting</a>
+            <a href="#Inspire hands" onclick="showSection('hands')">Inspire Hands</a>
+        </nav>
+
+        <section id="home" class="active">
+            <h2>G1 Humanoid Robot Guide</h2>
+            <p>This guide covers the essential setup and operation of the <strong>Unitree G1 Humanoid Robot</strong>.
+            </p>
+
+            <h3>Prerequisites</h3>
+
+            <h4>Required Skills</h4>
+            <ul>
+                <li><strong>Linux:</strong> Basic command line skills.</li>
+                <li><strong>ROS2:</strong> Familiarity with ROS 2 concepts (nodes, topics).</li>
+                <li><strong>Programming:</strong> Python or C++ for custom development.</li>
+            </ul>
+
+            <h4>PC Minimum Requirements</h4>
+            <ul>
+                <li><strong>RAM:</strong> 8 GB+</li>
+                <li><strong>Storage:</strong> 50 GB free</li>
+                <li><strong>GPU:</strong> no GPU requirement unless adding some 3rd party policies</li>
+                <li><strong>OS:</strong> Ubuntu 22.04 LTS</li>
+            </ul>
+
+            <h3>Remote & App Control</h3>
+            <p>For assistance with the remote controller or mobile app, contact <strong>Soofiyan</strong>.</p>
+        </section>
+
+        <section id="installation">
+            <h2>Installation</h2>
+            <p>Follow these steps to set up the control environment and necessary software packages.</p>
+
+            <h3>1.1. Inverse Kinematics dependencies</h3>
+            <p>First, create and activate a new Conda environment. Then, install the required packages.</p>
+
+            <pre><code>$ conda create -n unitree python=3.10
+$ conda activate unitree
+(unitree) $ conda install pinocchio -c conda-forge
+(unitree) $ pip install meshcat
+(unitree) $ pip install casadi</code></pre>
+
+            <h3>1.2. Unitree SDK</h3>
+            <p>Next, clone and install the <code>unitree_sdk2_python</code> library.</p>
+
+            <pre><code># Install unitree_sdk2_python.
+(unitree) $ git clone https://github.com/unitreerobotics/unitree_sdk2_python.git
+(unitree) $ cd unitree_sdk2_python
+(unitree) $ pip install -e .</code></pre>
+
+            <h3>1.3. Teleoperation Dependencies Setup</h3>
+            <p>Finally, clone the g1 teleoperation repository and install its specific requirements.</p>
+
+            <pre><code>(unitree) $ cd ~
+(unitree) $ git clone git@github.com:Soofiyan/g1_teleoperate.git
+(unitree) $ cd ~/g1_teleoperate
+(unitree) $ pip install -r requirements.txt
+(unitree) $ pip install empy==3.3.4
+(unitree) $ pip uninstall typing</code></pre>
+
+
+            <h3>1.4. (Optional) ROS2 install</h3>
+            <p>Go through the README.md file of this repository
+                <a href="https://github.com/unitreerobotics/unitree_ros2">unitree_ros2</a>.
+            </p>
+        </section>
+
+
+        <section id="usage">
+            <h2>How to run the robot ik on meshcat</h2>
+            <pre><code> # Go to the g1_teleoperate root folder
+(unitree) $ cd g1_teleoperate/teleop/robot_control
+(unitree) $ python robot_arm_ik_og.py</code></pre>
+
+        </section>
+
+        <section id="network">
+            <h2>Network Configuration</h2>
+            <p>This section explains how to establish a direct network connection between your computer and the
+                robot.</p>
+
+            <h3>Configuration Steps</h3>
+            <ol>
+                <li>Connect a network cable from the robot to your computer.</li>
+                <li>Enable USB Ethernet on your computer.</li>
+                <li>The robot's IP address is fixed at <strong>192.168.123.161</strong>. You must set your
+                    computer's USB Ethernet IP to the same subnet.
+                    <br> Set your computer's IP to <strong>192.168.123.222</strong>.
+                </li>
+            </ol>
+
+            <img src="Images/network_first.jpg" alt="ifconfig command output showing network card name"
+                style="width:100%; max-width:700px; border: 1px solid #ddd;">
+
+            <h3>Testing the Connection</h3>
+            <p>To verify the connection, ping the robot from your computer's terminal:</p>
+            <pre><code>ping 192.168.123.161</code></pre>
+            <p>A successful reply indicates the connection is working.</p>
+
+            <img src="Images/ping.png" alt="ifconfig command output showing network card name"
+                style="width:100%; max-width:700px; border: 1px solid #ddd;">
+
+
+            <h3>Identify Your Network Device</h3>
+            <p>You need to find the network card name assigned to this connection. Use the <code>ifconfig</code>
+                command.</p>
+            <p>In the example below, the network card name for the IP <strong>192.168.123.222</strong> is
+                <code>enxf8e43b808e06</code>. Note this name, as it's required to run the control examples.
+            </p>
+
+            <img src="Images/network_check.png" alt="ifconfig command output showing network card name"
+                style="width:100%; max-width:700px; border: 1px solid #ddd;">
+
+        </section>
+
+        <section id="hands">
+            <div class="container">
+                <h2>Inspire Hands Gen 4: Setup and Usage Guide</h2>
+
+                <h3>Setup and Installation</h3>
+                <p>Follow these steps to set up the necessary software for the Inspire Hand.</p>
+                <pre><code># 1. Clone the repository
+(unitree) $ git clone https://github.com/Soofiyan/inspire_hand_ws.git
+(unitree) $ cd inspire_hand_ws
+
+# 2. Install the Unitree SDK
+(unitree) $ cd unitree_sdk2_python
+(unitree) $ pip install -e .
+
+# 3. Install the Inspire Hand SDK
+(unitree) $ cd ../inspire_hand_sdk
+(unitree) $ pip install -e .
+
+# 4. Install required Python libraries
+(unitree) $ pip install pynput
+(unitree) $ pip install pymodbus==3.6.9</code></pre>
+
+                <hr>
+                <h3>Read sensor data</h3>
+                <p>Use the <strong>data_handler_worker</strong> callback function from the code
+                    <strong>sub_traget_LR.py</strong></p>
+
+                <h3>Control Modes</h3>
+                <p>The Inspire Hand SDK offers various control modes. You can select a mode by its corresponding ID
+                    number.
+                </p>
+
+                <table class="mode-table">
+                    <thead>
+                        <tr>
+                            <th>Mode ID</th>
+                            <th>Binary</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0</td>
+                            <td><code>0000</code></td>
+                            <td>No Operation</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td><code>0001</code></td>
+                            <td>Angle Control</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td><code>0010</code></td>
+                            <td>Position Control</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td><code>0011</code></td>
+                            <td>Angle + Position</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td><code>0100</code></td>
+                            <td>Force Control</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td><code>0101</code></td>
+                            <td>Angle + Force</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td><code>0110</code></td>
+                            <td>Position + Force</td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td><code>0111</code></td>
+                            <td>Angle + Position + Force</td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td><code>1000</code></td>
+                            <td>Velocity Control</td>
+                        </tr>
+                        <tr>
+                            <td>9</td>
+                            <td><code>1001</code></td>
+                            <td>Angle + Velocity</td>
+                        </tr>
+                        <tr>
+                            <td>10</td>
+                            <td><code>1010</code></td>
+                            <td>Position + Velocity</td>
+                        </tr>
+                        <tr>
+                            <td>11</td>
+                            <td><code>1011</code></td>
+                            <td>Angle + Position + Velocity</td>
+                        </tr>
+                        <tr>
+                            <td>12</td>
+                            <td><code>1100</code></td>
+                            <td>Force + Velocity</td>
+                        </tr>
+                        <tr>
+                            <td>13</td>
+                            <td><code>1101</code></td>
+                            <td>Angle + Force + Velocity</td>
+                        </tr>
+                        <tr>
+                            <td>14</td>
+                            <td><code>1110</code></td>
+                            <td>Position + Force + Velocity</td>
+                        </tr>
+                        <tr>
+                            <td>15</td>
+                            <td><code>1111</code></td>
+                            <td>Angle + Position + Force + Velocity</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </section>
+        <section id="safety">
+        </section>
+
+        <section id="troubleshooting">
+        </section>
+
+        <footer>
+            <p>&copy; ARClab. All Rights Reserved.</p>
+        </footer>
+
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+
+            const navLinks = document.querySelectorAll('nav a');
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + sectionId) {
+                    link.classList.add('active');
+                }
+            });
+        }
+    </script>
+
+</body>
+
+</html>
